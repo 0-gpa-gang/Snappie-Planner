@@ -26,7 +26,18 @@ class Calendar()
 			}
 		}
 	}
+	
+	modify()
+	{
+		
+	}
 
 
+}
+
+class Events
+{
+	this.start_time
+	
 
 }
