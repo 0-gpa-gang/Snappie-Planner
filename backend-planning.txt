@@ -1,3 +1,26 @@
-test test test
+class Day()
+{
+	day = 1 --> 7;
+	date = 1 --> 31;
+	month = 1 --> 12;
+}
 
-test
+
+class Calendar()
+{
+	init()
+	{
+		this.year = 2000;
+		this.leapyear = 0;
+		this.firstday = 6;
+		this.days_container = [Day().......]
+	}
+	seek_year(current_year)
+	{
+		this.increment_year()
+		if this.year == current_year)
+	}
+
+
+
+}
