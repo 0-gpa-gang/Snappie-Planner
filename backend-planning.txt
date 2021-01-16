@@ -17,8 +17,14 @@ class Calendar()
 	}
 	seek_year(current_year)
 	{
-		this.increment_year()
-		if this.year == current_year)
+		while (this.year != current_year)
+		{
+			this.increment_year()
+			if (this.year == current_year)
+			{
+			
+			}
+		}
 	}
 
 
