@@ -1,0 +1,106 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+table{
+  font-family:sans-serif;
+		  width: 100%;
+		  border-spacing: 0;
+	  	border-collapse: separate;
+		  table-layout: fixed;
+		  margin-bottom: 50px;}
+th {
+    background: rgb(152, 113, 224);
+	color: rgb(54, 26, 105);
+	padding: 0.5em;
+    overflow: hidden;
+}
+th:first-child{
+    border-radius:3px 0 0 0;
+} 
+th:last-child{
+    border-radius:0 3px  0 0;
+}
+
+.day{
+    display: block;
+    font-size: 1.2em;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 5px;
+    padding: 5px;
+    line-height: 1.8;}
+
+.short{
+    display: none;
+}
+
+i{
+    vertical-align: middle;
+    font-size: 2em;
+}
+
+tr{
+background-color:rgb(166, 146, 204);
+}
+
+tr:nth-child(odd){
+  background:white;
+}
+
+td{
+    border-bottom:1px solid rgb(165, 117, 125);
+}
+
+td{
+text-align: center;
+vertical-align: middle;
+border-left: 1px solid rgb(144, 126, 177);
+position: relative;
+height: 32px;
+cursor: pointer;
+}
+
+tr:last-child{
+    border-right:1px solid purple;
+}
+.hour{
+    font-size: 2em;
+    padding: 0;
+    color: palegoldenrod;
+    background:rgb(59, 35, 102);
+    border-bottom:1px solid palegoldenrod;
+    border-collapse: separate;
+    min-width: 100px;
+    cursor: default;}
+
+span{
+    display: block;
+}
+
+.month{
+    display: block;
+    margin: 17px 30px;
+    padding: 10px 20px 10px 10px;
+    background-color: rgb(62, 23, 107);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 2px solid #fff;
+    position: absolute;
+    width: 90px;
+}
+
+.week{
+    display: block;
+    margin: 17px 125px;
+    padding: 10px 20px 10px 10px;
+    background-color: rgb(62, 23, 107);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    width: 100px;
+    border: 2px solid #fff;
+    position:absolute;
+}
