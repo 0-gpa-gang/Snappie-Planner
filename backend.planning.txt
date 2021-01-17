@@ -1,9 +1,0 @@
-class Day()
-{
-	day = 1 --> 7;
-	date = 1 --> 31;
-	month = 1 --> 12;
-	events = [event1, ... event_n]
-}
-
-testing
