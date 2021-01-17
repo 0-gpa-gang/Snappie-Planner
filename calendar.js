@@ -29,6 +29,11 @@ class Day
 
 		this.event_container = [];
 	}
+
+	get_events()
+	{
+		return this.event_container;
+	}
 }
 
 class Calendar
@@ -37,7 +42,7 @@ class Calendar
 	{
 		this.year = 2000;
 		this.first_day = 6; // range from 1 -- 7.
-		this.months = [31, 28, 31, 30, 31, 30, 30, 31, 30, 31, 30, 31];
+		this.months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 		this.date_container = [];
 		
 		this.leap_years = [];
@@ -45,6 +50,8 @@ class Calendar
 		{
 			this.leap_years.push(2000 + i*4)
 		}
+
+		this.new_event_buffer = [];
 
 
 		let date = new Date();
@@ -142,28 +149,33 @@ class Calendar
 	get_month(month)
 	{
 		let month_arr = [];
+		let indices = [];
 		for (let i = 0; i < this.date_container.length; i+=1)
 		{
 			if (this.date_container[i].month == month)
-			{
+			{	
+				indices.push(i);
 				month_arr.push(this.date_container[i]);
 			}
 		}
 
 		let first_day_of_month = month_arr[0].day;
-		
-		//fills front of the array with spacers
-		var spacer = new Day();
-		spacer.day = null;
-		spacer.date = null;
-		spacer.month = month;
+		let lead_ind = indices[0];
+		let tail_ind = indices[indices.length-1];
+
+
+		//fills front of the array with previous month's days
+		//
+
 		for (let i = 0; i < first_day_of_month%7; i++)
 		{
-			month_arr.unshift(spacer);
+			month_arr.unshift(this.date_container[lead_ind-1-i]);
 		}
+		var end_of_month = 1
 		while (month_arr.length%7 != 0)
 		{
-			month_arr.push(spacer);
+			month_arr.push(this.date_container[tail_ind + end_of_month]);
+			end_of_month += 1;
 		}
 		
 		let rows = month_arr.length/7;
@@ -173,19 +185,90 @@ class Calendar
 
 	}
 	
+	// returns an array containing the days of the week
 	get_week(month, week)
 	{
-		let month = this.get_month(month);
-		try
+		let my_month = this.get_month(month);
+		if (week > my_month.length)
 		{
-			let week = month[week]
-			return week;
-		}
-		catch
+			let diff = week - my_month.length;
+
+			return my_month[week-1-diff];
+		}	
+		return my_month[week-1];
+	}
+
+	get_date(month, date)
+	{
+		for (var i = 0; i < this.date_container.length; i+=1)
 		{
-			return month[week-1];	
+			if (this.date_container[i].month == month &&
+				this.date_container[i].date == date)
+			{
+				return this.date_container[i];
+			}
 		}
 	}
+
+	save_event_to_date(month, date, evnt)
+	{
+		for (var i = 0; i < this.date_container.length; i+=1)
+		{
+			if (this.date_container[i].month == month &&
+				this.date_container[i].date == date)
+			{
+				for (var j = 0; j < this.date_container[i].event_container.length; j+=1)
+				{
+					if (evnt.start_time > this.date_container[i].event_container[j].start_time && evnt.start_time < this.date_container[i].event_container[j].end_time)
+					{
+						return false;
+					}
+				}
+				this.date_container[i].event_container.push(evnt);
+				return true;
+			}
+		}
+	}
+
+	load_events()
+	{
+		var xhr = new XMLHttpRequest();
+		//xhr.open()
+	}
+	
+	// Adds events that are pre-initiallized
+	// sdate, edate = [day, month]
+	add_manual_event(sbj, st, et, sdate, edate, desc, loc, priority, ddl)
+	{
+		var evnt = new Event();
+		evnt.subject = sbj;
+		evnt.start_time = st;
+		evnt.end_time = et;
+		evnt.description = desc;
+		evnt.loc = loc;
+		evnt.priority = priority;
+		evnt.deadline = ddl;
+		
+		var start_month = sdate[0];
+		var start_date = sdate[1];
+		
+		var saved = this.save_event_to_date(start_month, start_date, evnt);
+		
+	}
+	add_events_to_cal()
+	{
+		
+	}
+
+	// Checks for time comflicts between events
+	anti_collision(event_arr)
+	{
+		for (let i = 0; i < event_arr.length; i+=1)
+		{
+			
+		}
+	}
+
 
 	sort_event_by_importance(arr)
 	{       
@@ -230,6 +313,12 @@ function main()
 	//cal.increment_year_pointer(1);
 	console.log(cal.year, cal.first_day);
 	cal.populate();
-	cal.get_month(6);
-}
+	console.log(cal.get_date(6, 17));
+	cal.add_manual_event("subject", 6, 7, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
+	cal.add_manual_event("subject", 7, 8, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
+	cal.add_manual_event("subject", 9, 10, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
+	cal.add_manual_event("subject", 9.5, 12, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
+	console.log(cal.get_date(6, 17))
+}	
+	
 main();

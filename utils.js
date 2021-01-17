@@ -25,7 +25,7 @@ function reshape(arr, shape1, shape2)
 	{	mat.push([]);
 		for (var j = 0; j < shape2; j+=1)
 		{
-			mat[i].push(arr[(i+1)*(j+1)])
+			mat[i].push(arr[i*7 + j])
 		}
 	}
 
