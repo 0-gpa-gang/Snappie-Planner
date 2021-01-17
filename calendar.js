@@ -52,7 +52,7 @@ class Calendar
 		}
 
 		this.new_event_buffer = [];
-
+		this.user;
 
 		let date = new Date();
 		this.current_year = date.getFullYear()
@@ -230,10 +230,20 @@ class Calendar
 		}
 	}
 
-	load_events()
+	load_events(username)
 	{
-		var xhr = new XMLHttpRequest();
-		//xhr.open()
+		var result;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatecchange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				result = this.responseText;		
+			}
+		}
+		xhttp.open("GET", "returnevent.php?q="+username, true);
+		xhttp.send();
+		return result;
 	}
 	
 	// Adds events that are pre-initiallized
@@ -269,6 +279,10 @@ class Calendar
 		}
 	}
 
+	set_user(username)
+	{
+		this.user = username;
+	}
 
 	sort_event_by_importance(arr)
 	{       
