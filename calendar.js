@@ -17,57 +17,59 @@ class Calendar
 	{
 		this.year = 2000;
 		this.first_day = 6; // range from 1 -- 7.
-		this.leapyear = 0; // range from 0 -- 3, 0 being a leap year
 		this.months = [31, 28, 31, 30, 31, 30, 30, 31, 30, 31, 30, 31];
 		this.date_container = [];
+		
+		this.leap_years = [];
+		for (let i = -80; i < 80; i++)
+		{
+			this.leap_years.push(2000 + i*4)
+		}
+
 
 		let date = new Date();
 		this.current_year = date.getFullYear()
 
-		// this.seek_current_year();
+		this.seek_current_year();
 	}
 
 	//Increments the number of years specified by the incrementer parameter.
 	//Automatically handles leap years
 	increment_year_pointer(incrementer)
-	{
-		this.year += incrementer;
-		this.first_day += incrementer;
-		var offset1 = -1;
-		if (incrementer < 0)
+	{		
+		var count_leap = 0;
+		if (incrementer > 0)
 		{
-			offset1 = 0;
-		}
-		let leapcounter = divide_with_remainder(incrementer+offset1, 4);
-		this.first_day += leapcounter[0];
-
-		var offset2 = 1;
-		if (incrementer < 0)
+			for (var i = 0; i < this.leap_years.length; i+=1)
+			{
+				if (this.leap_years[i] >= this.year && this.leap_years[i] < this.year + incrementer)
+				{
+					count_leap += 1;
+				}	
+			}
+		} else
 		{
-			offset2 = 0
+  			for (var i = 0; i < this.leap_years.length; i+= 1)
+			{
+				if (this.leap_years[i] < this.year && this.leap_years[i] >= this.year + incrementer) 	
+				{
+					count_leap -= 1;
+				}
+			}
 		}
 
-		this.leapyear += leapcounter[1]+offset2;
+		this.first_day += incrementer + count_leap;
 
-
-
-		var first_day_handler = divide_with_remainder(this.first_day, 7); 
-		if (this.leapyear < 0)
-		{
-			this.leapyear = 4 + this.leapyear;
-		} else if (this.leapyear > 3)
-		{	
-			this.leapyear = 0 + this.leapyear - 4;
-		}
 		if (this.first_day > 7)
 		{
-			this.first_day = first_day_handler[1] + 1;
+			this.first_day = divide_with_remainder(this.first_day, 7)[1];
 		} else if (this.first_day < 1)
 		{
-			
-			this.first_day = 7 + first_day_handler[1];
+			this.first_day = 7 + divide_with_remainder(this.first_day, 7)[1];
 		}
-
+		this.year += incrementer;
+			
+			
 	}
 	
 	seek_current_year()
@@ -97,12 +99,14 @@ class Calendar
 			}
 			if (i == 1)
 			{
+				console.log("INSERT LEAP YEAR")
 				var leap_day_obj = new Day();
-				leap_day_obj.day = divide_with_remainder(this.first_day + day_accumulator, 7)[1] + 1;
+				leap_day_obj.day = divide_with_remainder(this.first_day + day_accumulator-1, 7)[1] + 1;
 				day_accumulator += 1;
 				leap_day_obj.date = 29;
 				leap_day_obj.month = 2;
 				this.date_container.push(leap_day_obj);
+				console.log(leap_day_obj.day, leap_day_obj.date, leap_day_obj.month)
 			}
 		}
 	}
@@ -114,8 +118,8 @@ class Calendar
 function main()
 {
 	let cal = new Calendar();
-	cal.increment_year_pointer(-1);
-	console.log(cal.year, cal.first_day, cal.leapyear);
+	cal.increment_year_pointer(1);
+	console.log(cal.year, cal.first_day);
 	cal.populate();
 }
 main();
