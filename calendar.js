@@ -58,6 +58,8 @@ class Calendar
 		this.current_year = date.getFullYear()
 
 		this.seek_current_year();
+
+		this.events_ready = false;
 	}
 
 	//Increments the number of years specified by the incrementer parameter.
@@ -231,21 +233,29 @@ class Calendar
 	}
 
 	load_events(username)
-	{
-		var result;
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatecchange = function()
-		{
-			if (this.readyState == 4 && this.status == 200)
+	{	
+		var self = this;
+		$.ajax({
+			url: "returnevent.php?q=" + username,
+			async: false,
+			success: function(result) 
 			{
-				result = this.responseText;		
+				self.xhttp_callback(result)
 			}
-		}
-		xhttp.open("GET", "returnevent.php?q="+username, true);
-		xhttp.send();
-		return result;
+		})
+		
 	}
 	
+	xhttp_callback(val)
+	{
+		this.event_temp = val;
+	}
+
+	get_loaded_events()
+	{
+		return this.event_temp;
+	}
+
 	// Adds events that are pre-initiallized
 	// sdate, edate = [day, month]
 	add_manual_event(sbj, st, et, sdate, edate, desc, loc, priority, ddl)
@@ -333,6 +343,11 @@ function main()
 	cal.add_manual_event("subject", 9, 10, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
 	cal.add_manual_event("subject", 9.5, 12, [6, 17, 2021], [6, 17, 2021], "foo", "here", 3, [6, 18, 2021]);
 	console.log(cal.get_date(6, 17))
+	cal.load_events("aasdf");
+	setTimeout(() => {
+		var e = cal.get_loaded_events();
+		console.log(e)
+	}, 500);
 }	
 	
 main();

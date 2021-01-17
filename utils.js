@@ -1,3 +1,10 @@
+function sleep(milliseconds) {
+  	const date = Date.now();
+  	let currentDate = null;
+  	do {
+    		currentDate = Date.now();
+  	} while (currentDate - date < milliseconds);
+}
 
 // num1/num2 = num3 R remainder
 function divide_with_remainder(num1, num2)
@@ -31,3 +38,4 @@ function reshape(arr, shape1, shape2)
 
 	return mat;
 }
+
